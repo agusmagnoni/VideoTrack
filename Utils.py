@@ -67,7 +67,7 @@ def showresta(imagen,color,gris=False,tolerancia=20,destroy=False):
         cv2.namedWindow(tituloVentana)
     cv2.imshow(tituloVentana, mostrar)
     
-def mainrutine():
+def mainrutine(umbral=20):
     # Definimos parametros y cosas para el recorte
     refPt = []
     cropping = False
@@ -163,26 +163,28 @@ def mainrutine():
             image = cv2.rectangle(bkp.copy(), refPt[0], lastPosition, (0, 255, 0), 2)
             cv2.imshow(title, image)
         if colorchange:
+            print ('cucu')
+            showresta(image.copy(),color.copy(),tolerancia=umbral,gris=True)
             colorchange=False
-            showresta(image.copy(),color.copy(),gris=True)
         if key == ord('s'):
             salir = True
             video = True
     cv2.destroyAllWindows()
     
-    # inicializamos el modo video
-    cap = cv2.VideoCapture(0)
-    salir = False
-    while (not salir):
-        key = cv2.waitKey(1)
-        if key == ord('q'):
-            salir = True
-        # Capture frame-by-frame
-        ret, frame = cap.read()
-        showresta(frame.copy(),color.copy(),gris=False)
-        
-    cap.release()
-    cv2.destroyAllWindows()
+    if video:
+        # inicializamos el modo video
+        cap = cv2.VideoCapture(0)
+        salir = False
+        while (not salir):
+            key = cv2.waitKey(1)
+            if key == ord('q'):
+                salir = True
+            # Capture frame-by-frame
+            ret, frame = cap.read()
+            showresta(frame.copy(),color.copy(),tolerancia=umbral,gris=False)
 
-    
+        cap.release()
+        cv2.destroyAllWindows()
+
+
     
